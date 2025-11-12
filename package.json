@@ -1,0 +1,27 @@
+{
+  "name": "ts-temlate-10_25",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "rimraf ./build && tsc && node ./build/src/app.js",
+    "dev": "tsx watch src/app.ts dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@types/express": "^5.0.5",
+    "@types/joi": "^17.2.2",
+    "@types/node": "^24.9.0",
+    "rimraf": "^6.0.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "joi": "^18.0.1"
+  }
+}
