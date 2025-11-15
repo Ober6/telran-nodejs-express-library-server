@@ -18,3 +18,16 @@ export const convertBookDtoToBook = (dto:BookDto):Book => {
         year: dto.year
     }
 }
+
+
+export function mapDocToBook(doc: any): Book {
+    return {
+        id: doc._id.toString(),
+        title: doc.title,
+        author: doc.author,
+        genre: doc.genre,
+        year: doc.year,
+        status: doc.status,
+        pickList: doc.pickList
+    };
+}

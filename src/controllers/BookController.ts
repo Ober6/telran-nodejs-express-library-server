@@ -1,10 +1,12 @@
 import {BookService} from "../service/BookService.js";
-import {bookServiceEmbedded} from "../service/BookServiceImplEmbedded.js";
+// import {bookServiceEmbedded} from "../service/impl/BookServiceImplEmbedded.js";
+import {booksServiceMongo} from "../service/impl/BookServiceImplMongo.js";
+
 import {Request, Response, NextFunction} from "express";
 import {Book, BookDto} from "../model/book.js";
 import {convertBookDtoToBook} from "../utils/tools.js";
 import {HttpError} from "../errorHandler/HttpError.js";
-import {bookDtoSchema, pickBookSchema} from "../joiSchemas/bookSchemas.js";
+import {bookDtoSchema, pickBookSchema} from "../joiSchemas/bookJoiSchemas.js";
 
 export class BookController {
     constructor(private bookService: BookService) {}
@@ -71,4 +73,5 @@ export class BookController {
     }
 }
 
-export const bookController = new BookController(bookServiceEmbedded);
+// export const bookController = new BookController(bookServiceEmbedded);
+export const bookController = new BookController(booksServiceMongo);
