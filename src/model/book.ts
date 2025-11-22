@@ -8,7 +8,7 @@ export type BookDto = {
 }
 
 export type Book = {
-    id:string,
+    _id?:string,
     title:string,
     author:string,
     genre:BookGenres,

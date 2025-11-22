@@ -1,77 +1,49 @@
 import {BookService} from "../service/BookService.js";
-// import {bookServiceEmbedded} from "../service/impl/BookServiceImplEmbedded.js";
-import {booksServiceMongo} from "../service/impl/BookServiceImplMongo.js";
-
-import {Request, Response, NextFunction} from "express";
+import {bookServiceEmbedded} from "../service/impl/BookServiceImplEmbedded.js";
+import {NextFunction, Request, Response} from "express";
 import {Book, BookDto} from "../model/book.js";
 import {convertBookDtoToBook} from "../utils/tools.js";
-import {HttpError} from "../errorHandler/HttpError.js";
-import {bookDtoSchema, pickBookSchema} from "../joiSchemas/bookJoiSchemas.js";
+import {bookServiceMongo} from "../service/impl/BookServiceImplMongo.js";
+import {bookServiceSql} from "../service/impl/BookServiceImplSQL.js";
 
 export class BookController {
-    constructor(private bookService: BookService) {}
+    // service: BookService = bookServiceEmbedded;
+    //private service: BookService = bookServiceMongo;
+    private service: BookService = bookServiceSql;
 
-    async addBook(req: Request, res: Response, next: NextFunction) {
-        const body = req.body;
-        const {error} = bookDtoSchema.validate(body);
-        if (error) {
-            throw new HttpError(400, error.message);
-        }
-        const book: Book = convertBookDtoToBook(body as BookDto);
-        await this.bookService.addBook(book);
-        res.status(201).json(book);
+    removeBook = async (req:Request, res:Response) => {
+        const bookId = req.query.bookId;
+        const result = await this.service.removeBook(bookId as string);
+        res.json(result)
     }
 
-    async getAllBooks(req: Request, res: Response, next: NextFunction) {
-        const result = await this.bookService.getAllBooks();
-        res.status(200).json(result);
+    addBook = async (req:Request, res:Response) =>  {
+        const dto = req.body as BookDto;
+        const book:Book = convertBookDtoToBook(dto);
+        const result = await this.service.addBook(book);
+        res.status(201).json(result)
     }
-
-    async getBookByAuthor(req: Request, res: Response, next: NextFunction) {
-        const {author} = req.params;
-        if (!author) {
-            throw new HttpError(400, "Author parameter is required");
-        }
-        const result = await this.bookService.getBookByAuthor(author);
-        res.status(200).json(result);
+    getAllBooks = async (req:Request, res: Response)=> {
+        const result = await this.service.getAllBooks();
+        res.json(result)
     }
-
-    async removeBook(req: Request, res: Response, next: NextFunction) {
-        const {id} = req.params;
-        if (!id) {
-            throw new HttpError(400, "Book ID is required");
-        }
-        const result = await this.bookService.removeBook(id);
-        res.status(200).json(result);
+    pickBook = async (req:Request, res: Response) => {
+        const bookId = req.query.bookId;
+        const {readerName, readerId} = req.body;
+        await this.service.pickBook(bookId as string, readerName, +readerId);
+        res.send(`Book picked to ${readerName}`);
     }
-
-    async pickBook(req: Request, res: Response, next: NextFunction) {
-        const {id} = req.params;
-        const body = req.body;
-
-        if (!id) {
-            throw new HttpError(400, "Book ID is required");
-        }
-
-        const {error} = pickBookSchema.validate(body);
-        if (error) {
-            throw new HttpError(400, error.message);
-        }
-
-        const {reader, readerId} = body;
-        await this.bookService.pickBook(id, reader, readerId);
-        res.status(200).json({message: "Book picked successfully"});
+    returnBook = async (req:Request, res: Response) => {
+        const bookId = req.query.bookId;
+        await this.service.returnBook(bookId as string);
+        res.send("Book returned")
     }
-
-    async returnBook(req: Request, res: Response, next: NextFunction) {
-        const {id} = req.params;
-        if (!id) {
-            throw new HttpError(400, "Book ID is required");
-        }
-        await this.bookService.returnBook(id);
-        res.status(200).json({message: "Book returned successfully"});
+    getBookByAuthor = async (req:Request, res: Response) => {
+        const author = req.query.author;
+        const result = await this.service.getBookByAuthor(author as string);
+        res.json(result);
     }
 }
 
-// export const bookController = new BookController(bookServiceEmbedded);
-export const bookController = new BookController(booksServiceMongo);
+
+export const bookController = new BookController();
