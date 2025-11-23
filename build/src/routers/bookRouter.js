@@ -1,9 +1,11 @@
 import express from "express";
 import { bookController } from "../controllers/BookController.js";
+import { bodyValidator } from "../middleware/bodyValidator.js";
+import { bookJoiSchema, readerJoiSchema } from "../joiSchemas/bookJoiSchemas.js";
 export const bookRouter = express.Router();
-bookRouter.get('/books', bookController.getAllBooks.bind(bookController));
-bookRouter.get('/books/author/:author', bookController.getBookByAuthor.bind(bookController));
-bookRouter.post('/books', bookController.addBook.bind(bookController));
-bookRouter.delete('/books/:id', bookController.removeBook.bind(bookController));
-bookRouter.post('/books/:id/pick', bookController.pickBook.bind(bookController));
-bookRouter.post('/books/:id/return', bookController.returnBook.bind(bookController));
+bookRouter.get('/', bookController.getAllBooks);
+bookRouter.post('/', bodyValidator(bookJoiSchema), bookController.addBook); //(req, res) => {bookController.addBook(req,res)}
+bookRouter.delete('/', bookController.removeBook); //(req, res) => {bookController.addBook(req,res)}
+bookRouter.patch('/pick', bodyValidator(readerJoiSchema), bookController.pickBook); //(req, res) => {bookController.addBook(req,res)}
+bookRouter.patch('/return', bookController.returnBook); //(req, res) => {bookController.addBook(req,res)}
+bookRouter.get('/author', bookController.getBookByAuthor); //(req, res) => {bookController.addBook(req,res)}

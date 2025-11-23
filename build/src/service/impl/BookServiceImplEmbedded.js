@@ -1,12 +1,22 @@
-import { BookStatus } from "../../model/book.js";
+import { BookGenres, BookStatus } from "../../model/book.js";
 import { HttpError } from "../../errorHandler/HttpError.js";
 class BookServiceImplEmbedded {
     constructor() {
-        this.books = [];
+        this.books = [
+            {
+                _id: "123",
+                title: "War And Peace",
+                author: "Lev Tolstoy",
+                genre: BookGenres.CLASSIC,
+                year: 2000,
+                status: BookStatus.IN_STOCK,
+                pickList: []
+            }
+        ];
     }
     addBook(book) {
-        if (this.books.find(item => item.id === book.id))
-            throw new HttpError(409, `Book with id: ${book.id} already exists`);
+        if (this.books.find(item => item._id === book._id))
+            throw new HttpError(409, `Book with id: ${book._id} already exists`);
         this.books.push(book);
         return Promise.resolve();
     }
@@ -14,55 +24,34 @@ class BookServiceImplEmbedded {
         return Promise.resolve([...this.books]);
     }
     getBookByAuthor(author) {
-        const booksByAuthor = this.books.filter(book => book.author.toLowerCase() === author.toLowerCase());
-        return Promise.resolve(booksByAuthor);
+        return Promise.resolve(this.books.filter(item => item.author === author));
     }
     pickBook(id, reader, readerId) {
-        const book = this.books.find(item => item.id === id);
-        if (!book) {
-            throw new HttpError(404, `Book with id: ${id} not found`);
-        }
-        if (book.status !== BookStatus.IN_STOCK) {
-            throw new HttpError(400, `Book is not available. Current status: ${book.status}`);
-        }
-        book.pickList.push({
-            readerId,
-            readerName: reader,
-            pickDate: new Date().toISOString(),
-            returnDate: null
-        });
+        const book = this.books.find(item => item._id === id);
+        if (!book)
+            throw new HttpError(404, `Book with id ${id} not found`);
+        if (book.status !== BookStatus.IN_STOCK)
+            throw new HttpError(409, "Book just picked");
         book.status = BookStatus.ON_HAND;
+        book.pickList.push({ readerId, readerName: reader, pickDate: new Date().toDateString(), returnDate: null });
         return Promise.resolve();
     }
     removeBook(id) {
-        const bookIndex = this.books.findIndex(item => item.id === id);
-        if (bookIndex === -1) {
-            throw new HttpError(404, `Book with id: ${id} not found`);
-        }
-        const book = this.books[bookIndex];
-        if (book.status === BookStatus.ON_HAND) {
-            throw new HttpError(400, `Cannot remove book that is currently on hand`);
-        }
-        book.status = BookStatus.REMOVED;
-        this.books.splice(bookIndex, 1);
-        return Promise.resolve(book);
+        const index = this.books.findIndex(item => item._id === id);
+        if (index === -1)
+            throw new HttpError(404, `Book with id ${id} not found`);
+        const removed = this.books.splice(index, 1)[0];
+        removed.status = BookStatus.REMOVED;
+        return Promise.resolve(removed);
     }
     returnBook(id) {
-        const book = this.books.find(item => item.id === id);
-        if (!book) {
-            throw new HttpError(404, `Book with id: ${id} not found`);
-        }
-        if (book.status !== BookStatus.ON_HAND) {
-            throw new HttpError(400, `Book is not on hand. Current status: ${book.status}`);
-        }
-        const activePickRecord = book.pickList
-            .slice()
-            .reverse()
-            .find(record => record.returnDate === null);
-        if (activePickRecord) {
-            activePickRecord.returnDate = new Date().toISOString();
-        }
+        const book = this.books.find(item => item._id === id);
+        if (!book)
+            throw new HttpError(404, `Book with id ${id} not found`);
+        if (book.status !== BookStatus.ON_HAND)
+            throw new HttpError(409, "Book in stock");
         book.status = BookStatus.IN_STOCK;
+        book.pickList[book.pickList.length - 1].returnDate = new Date().toDateString();
         return Promise.resolve();
     }
 }

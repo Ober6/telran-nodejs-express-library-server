@@ -1,34 +1,12 @@
-import Joi from 'joi';
-import { BookGenres } from "../model/book.js";
-export const bookDtoSchema = Joi.object({
-    title: Joi.string()
-        .min(1)
-        .max(200)
-        .required(),
-    author: Joi.string()
-        .min(1)
-        .max(100)
-        .required(),
-    genre: Joi.string()
-        .valid(...Object.values(BookGenres))
-        .required(),
-    year: Joi.number()
-        .integer()
-        .min(1000)
-        .max(new Date().getFullYear())
-        .required(),
-    quantity: Joi.number()
-        .integer()
-        .min(1)
-        .optional()
+import Joi from "joi";
+export const bookJoiSchema = Joi.object({
+    title: Joi.string().required(),
+    author: Joi.string().required(),
+    genre: Joi.string().required(),
+    year: Joi.number().min(1900).max(new Date().getFullYear()).required(),
+    quantity: Joi.number().positive().max(100)
 });
-export const pickBookSchema = Joi.object({
-    reader: Joi.string()
-        .min(1)
-        .max(100)
-        .required(),
-    readerId: Joi.number()
-        .integer()
-        .positive()
-        .required()
+export const readerJoiSchema = Joi.object({
+    readerName: Joi.string().required(),
+    readerId: Joi.number().positive().min(100000000).max(999999999).required()
 });

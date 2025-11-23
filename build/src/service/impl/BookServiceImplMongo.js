@@ -8,81 +8,77 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { BookStatus } from "../../model/book.js";
-import { BookModel } from "../../dbSchemas/bookMongooseSchema.js";
+import { bookMongooseModel } from "../../dbSchemas/bookMongooseSchema.js";
+import { v4 as uuidv4 } from 'uuid';
 import { HttpError } from "../../errorHandler/HttpError.js";
-import { mapDocToBook } from "../../utils/tools.js";
-class BookServiceImplMongo {
+export class BookServiceImplMongo {
     addBook(book) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield BookModel.create({
-                title: book.title,
-                author: book.author,
-                genre: book.genre,
-                year: book.year,
-                status: book.status || BookStatus.IN_STOCK,
-                pickList: book.pickList || []
-            });
+            //   const isExists = await bookMongooseModel.findById(book.id)
+            // const newBookDoc = await bookMongooseModel.create(book);
+            // await newBookDoc.save();
+            const doc = yield bookMongooseModel.create(Object.assign(Object.assign({}, book), { _id: uuidv4() }));
         });
     }
     getAllBooks() {
         return __awaiter(this, void 0, void 0, function* () {
-            const docs = yield BookModel.find();
-            return docs.map(doc => mapDocToBook(doc));
+            const result = yield bookMongooseModel.find().exec();
+            return result;
         });
     }
     getBookByAuthor(author) {
         return __awaiter(this, void 0, void 0, function* () {
-            const docs = yield BookModel.find({
-                author: { $regex: new RegExp(`^${author}$`, "i") }
-            });
-            return docs.map(doc => mapDocToBook(doc));
+            const result = yield bookMongooseModel.find({ author: author }).exec();
+            return result;
         });
     }
     pickBook(id, reader, readerId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const doc = yield BookModel.findById(id);
-            if (!doc)
-                throw new HttpError(404, `Book with id: ${id} not found`);
-            if (doc.status !== BookStatus.IN_STOCK)
-                throw new HttpError(400, `Book is not available. Current status: ${doc.status}`);
-            doc.pickList.push({
+            const bookDoc = yield bookMongooseModel.findById(id).exec();
+            if (!bookDoc)
+                throw new HttpError(409, `Book with id ${id} not exists`);
+            if (bookDoc.status != BookStatus.IN_STOCK)
+                throw new HttpError(409, `Book status is not "in-stock"`);
+            bookDoc.status = BookStatus.ON_HAND;
+            bookDoc.pickList.push({
                 readerId,
                 readerName: reader,
-                pickDate: new Date().toISOString(),
+                pickDate: new Date().toDateString(),
                 returnDate: null
             });
-            doc.status = BookStatus.ON_HAND;
-            yield doc.save();
+            yield bookDoc.save();
+            return Promise.resolve(undefined);
         });
     }
     removeBook(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const doc = yield BookModel.findById(id);
-            if (!doc)
-                throw new HttpError(404, `Book with id: ${id} not found`);
-            if (doc.status === BookStatus.ON_HAND)
-                throw new HttpError(400, `Cannot remove book that is currently on hand`);
-            doc.status = BookStatus.REMOVED;
-            yield doc.save();
-            yield BookModel.deleteOne({ _id: id });
-            return mapDocToBook(doc);
+            const bookDoc = yield bookMongooseModel.findById(id).exec();
+            if (!bookDoc)
+                throw new HttpError(409, `Book with id ${id} not exists`);
+            if (bookDoc.status !== BookStatus.IN_STOCK) {
+                bookDoc.status = BookStatus.REMOVED;
+                yield bookDoc.save();
+                throw new HttpError(409, "Book is on hand. Markered as REMOVED");
+            }
+            const removed = yield bookMongooseModel.findByIdAndDelete(id).exec();
+            return removed;
         });
     }
     returnBook(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const doc = yield BookModel.findById(id);
-            if (!doc)
-                throw new HttpError(404, `Book with id: ${id} not found`);
-            if (doc.status !== BookStatus.ON_HAND)
-                throw new HttpError(400, `Book is not on hand. Current status: ${doc.status}`);
-            const activeRecord = [...doc.pickList]
-                .reverse()
-                .find(r => r.returnDate === null);
-            if (activeRecord)
-                activeRecord.returnDate = new Date().toISOString();
-            doc.status = BookStatus.IN_STOCK;
-            yield doc.save();
+            const bookDoc = yield bookMongooseModel.findById(id).exec();
+            if (!bookDoc)
+                throw new HttpError(409, `Book with id ${id} not exists`);
+            if (bookDoc.status === BookStatus.IN_STOCK)
+                throw new HttpError(409, `Book is in-stock`);
+            bookDoc.pickList[bookDoc.pickList.length - 1].returnDate = new Date().toDateString();
+            if (bookDoc.status === BookStatus.REMOVED) {
+                bookMongooseModel.findByIdAndDelete(id); //ToDo
+                throw new HttpError(400, "Book markered as REMOVED was deleted from DB");
+            }
+            bookDoc.status = BookStatus.IN_STOCK;
+            yield bookDoc.save();
         });
     }
 }
-export const booksServiceMongo = new BookServiceImplMongo();
+export const bookServiceMongo = new BookServiceImplMongo();

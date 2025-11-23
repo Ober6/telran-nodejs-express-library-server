@@ -7,79 +7,44 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-// import {bookServiceEmbedded} from "../service/impl/BookServiceImplEmbedded.js";
-import { booksServiceMongo } from "../service/impl/BookServiceImplMongo.js";
 import { convertBookDtoToBook } from "../utils/tools.js";
-import { HttpError } from "../errorHandler/HttpError.js";
-import { bookDtoSchema, pickBookSchema } from "../joiSchemas/bookJoiSchemas.js";
+import { bookServiceSql } from "../service/impl/BookServiceImplSQL.js";
 export class BookController {
-    constructor(bookService) {
-        this.bookService = bookService;
-    }
-    addBook(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const body = req.body;
-            const { error } = bookDtoSchema.validate(body);
-            if (error) {
-                throw new HttpError(400, error.message);
-            }
-            const book = convertBookDtoToBook(body);
-            yield this.bookService.addBook(book);
-            res.status(201).json(book);
+    constructor() {
+        // service: BookService = bookServiceEmbedded;
+        //private service: BookService = bookServiceMongo;
+        this.service = bookServiceSql;
+        this.removeBook = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const bookId = req.query.bookId;
+            const result = yield this.service.removeBook(bookId);
+            res.json(result);
         });
-    }
-    getAllBooks(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.bookService.getAllBooks();
-            res.status(200).json(result);
+        this.addBook = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const dto = req.body;
+            const book = convertBookDtoToBook(dto);
+            const result = yield this.service.addBook(book);
+            res.status(201).json(result);
         });
-    }
-    getBookByAuthor(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { author } = req.params;
-            if (!author) {
-                throw new HttpError(400, "Author parameter is required");
-            }
-            const result = yield this.bookService.getBookByAuthor(author);
-            res.status(200).json(result);
+        this.getAllBooks = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const result = yield this.service.getAllBooks();
+            res.json(result);
         });
-    }
-    removeBook(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { id } = req.params;
-            if (!id) {
-                throw new HttpError(400, "Book ID is required");
-            }
-            const result = yield this.bookService.removeBook(id);
-            res.status(200).json(result);
+        this.pickBook = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const bookId = req.query.bookId;
+            const { readerName, readerId } = req.body;
+            yield this.service.pickBook(bookId, readerName, +readerId);
+            res.send(`Book picked to ${readerName}`);
         });
-    }
-    pickBook(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { id } = req.params;
-            const body = req.body;
-            if (!id) {
-                throw new HttpError(400, "Book ID is required");
-            }
-            const { error } = pickBookSchema.validate(body);
-            if (error) {
-                throw new HttpError(400, error.message);
-            }
-            const { reader, readerId } = body;
-            yield this.bookService.pickBook(id, reader, readerId);
-            res.status(200).json({ message: "Book picked successfully" });
+        this.returnBook = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const bookId = req.query.bookId;
+            yield this.service.returnBook(bookId);
+            res.send("Book returned");
         });
-    }
-    returnBook(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { id } = req.params;
-            if (!id) {
-                throw new HttpError(400, "Book ID is required");
-            }
-            yield this.bookService.returnBook(id);
-            res.status(200).json({ message: "Book returned successfully" });
+        this.getBookByAuthor = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const author = req.query.author;
+            const result = yield this.service.getBookByAuthor(author);
+            res.json(result);
         });
     }
 }
-// export const bookController = new BookController(bookServiceEmbedded);
-export const bookController = new BookController(booksServiceMongo);
+export const bookController = new BookController();
