@@ -1,7 +1,7 @@
 import express from "express";
 import {bookController} from "../controllers/BookController.js";
 import {bodyValidator} from "../middleware/bodyValidator.js";
-import {bookJoiSchema, readerJoiSchema} from "../joiSchemas/bookJoiSchemas.js";
+import {bookJoiSchema, readerJoiSchema} from "../joiSchemas/joiSchemas.js";
 
 export const bookRouter = express.Router();
 

@@ -16,4 +16,12 @@ import dotenv from "dotenv";
 dotenv.config();
 export const pool = createSqlPool();
 console.log("Sql connected")
-launchServer()
+
+mongoose.connect(process.env.ACCOUNT_DB as string).then(() => {
+    console.log("Mongo db connected");
+    launchServer();
+}).catch(err => {
+    console.log("Mongo connection failed")
+})
+
+// launchServer()
