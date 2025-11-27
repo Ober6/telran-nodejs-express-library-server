@@ -1,16 +1,9 @@
 import express from "express";
-import {accountController} from "../controllers/AccountController.js";
-import {bodyValidator} from "../middleware/bodyValidator.js";
-import {
-    changePasswordJoiSchema,
-    createReaderJoiSchema,
-    updateReaderJoiSchema
-} from "../joiSchemas/accountingJoySchemas.js";
-
+import { accountController } from "../controllers/AccountController.js";
+import { bodyValidator } from "../middleware/bodyValidator.js";
+import { changePasswordJoiSchema, createReaderJoiSchema, updateReaderJoiSchema } from "../joiSchemas/accountingJoySchemas.js";
 export const accountRouter = express.Router();
-
 const controller = accountController;
-
 accountRouter.post('/', bodyValidator(createReaderJoiSchema), controller.createReader);
 accountRouter.get('/byId', controller.getAccountById);
 accountRouter.delete('/', controller.removeAccount);

@@ -3,6 +3,7 @@ import { errorHandler } from "./errorHandler/errorHandler.js";
 import { bookRouter } from "./routers/bookRouter.js";
 import morgan from "morgan";
 import * as fs from "node:fs";
+import { accountRouter } from "./routers/accountRouter.js";
 //import dotenv from "dotenv";
 export const launchServer = () => {
     const app = express();
@@ -23,6 +24,7 @@ export const launchServer = () => {
     //Log4js
     //===================Router====================
     app.use('/api/books', bookRouter);
+    app.use('/account', accountRouter);
     app.use((req, res) => {
         res.status(404).send("Page not found");
     });

@@ -1,0 +1,105 @@
+{
+  "info": {
+    "name": "Accounting API_v27-11-2025",
+    "_postman_id": "acc-simple-001-12345",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Reader",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": 123456789,\n  \"name\": \"John Doe\",\n  \"password\": \"1234\",\n  \"balance\": 0\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/account",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["account"]
+        }
+      }
+    },
+    {
+      "name": "Get Account by ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/account/byId?id=123456789",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["account", "byId"],
+          "query": [
+            { "key": "id", "value": "123456789" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Delete Account",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": 123456789\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/account",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["account"]
+        }
+      }
+    },
+    {
+      "name": "Change Password",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": 123456789,\n  \"oldPassword\": \"1234\",\n  \"newPassword\": \"abcd\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/account/password",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["account", "password"]
+        }
+      }
+    },
+    {
+      "name": "Update Account",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": 123456789,\n  \"name\": \"New Name\",\n  \"balance\": 150\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/account/update",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["account", "update"]
+        }
+      }
+    }
+  ]
+}
