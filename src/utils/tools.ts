@@ -4,6 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 import {Reader, ReaderDto} from "../model/reader.js";
 import bcrypt from "bcryptjs";
 
+import {Roles} from "./libTypes.js";
+import jwt from  "jsonwebtoken";
+
 export function getGenre(genre: string) {
     const gen = Object.values(BookGenres).find(v => v === genre)
     if(!gen) throw new HttpError(400, "Wrong genre")
@@ -26,13 +29,22 @@ export const convertBookDtoToBook = (dto:BookDto):Book => {
 export const convertReaderDtoToReader = (readerDto:ReaderDto) => {
     const salt = bcrypt.genSaltSync(10);
     const reader:Reader = {
-        _id: readerDto.id,
+        _id: +readerDto.id,
         birthDate: readerDto.birthDate,
         email: readerDto.email,
         passHash: bcrypt.hashSync(readerDto.password, salt),
-        username: readerDto.username
-
+        username: readerDto.username,
+        roles: [Roles.READER]
     }
     return reader;
 }
 
+export const getJWT = (id: number, roles: Roles[])=> {
+    let payload = {roles:JSON.stringify(roles)};
+    let secret = process.env.JWT_SECRET || 'new-secret-key';
+    const options = {
+        expiresIn: process.env.JWT_EXP as any || "1h",
+        subject:id.toString()
+    }
+    return jwt.sign(payload, secret, options);
+}

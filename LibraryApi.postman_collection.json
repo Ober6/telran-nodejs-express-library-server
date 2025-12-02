@@ -1,0 +1,214 @@
+{
+  "info": {
+    "_postman_id": "491958c9-4f44-4810-824c-f067f7e0c7f3",
+    "name": "LibraryApi",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "18222058",
+    "_collection_link": "https://www.postman.com/warped-trinity-518501/workspace/java-28-31/collection/18222058-491958c9-4f44-4810-824c-f067f7e0c7f3?action=share&source=collection_link&creator=18222058"
+  },
+  "item": [
+    {
+      "name": "Books",
+      "item": [
+        {
+          "name": "GetAllBooks",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3050/api/books",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3050",
+              "path": [
+                "api",
+                "books"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "AddBook",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"author\": \"Orwell\",\r\n    \"genre\": \"dystopia\",\r\n    \"title\": \"1984\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3050/api/books",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3050",
+              "path": [
+                "api",
+                "books"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RemoveBook",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"author\": \"Orwell\",\r\n    \"genre\": \"dystopia\",\r\n    \"title\": \"1984\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3050/api/books?bookId=361",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3050",
+              "path": [
+                "api",
+                "books"
+              ],
+              "query": [
+                {
+                  "key": "bookId",
+                  "value": "361"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PickBook",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n   \"reader\": \"Villy\",\r\n   \"readerId\": 123456789\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3050/api/books/pick?bookId=210",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3050",
+              "path": [
+                "api",
+                "books",
+                "pick"
+              ],
+              "query": [
+                {
+                  "key": "bookId",
+                  "value": "210"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ReturnBook",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"author\": \"Orwell\",\r\n    \"genre\": \"dystopia\",\r\n    \"title\": \"1984\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3050/api/books/return?bookId=123",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3050",
+              "path": [
+                "api",
+                "books",
+                "return"
+              ],
+              "query": [
+                {
+                  "key": "bookId",
+                  "value": "123"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getBookByAuthor",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"author\": \"Orwell\",\r\n    \"genre\": \"dystopia\",\r\n    \"title\": \"1984\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3050/api/books/author?author=Lev Tolstoy",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3050",
+              "path": [
+                "api",
+                "books",
+                "author"
+              ],
+              "query": [
+                {
+                  "key": "author",
+                  "value": "Lev Tolstoy"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

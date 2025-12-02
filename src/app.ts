@@ -14,7 +14,9 @@ import dotenv from "dotenv";
 //     });
 
 dotenv.config();
+
 export const pool = createSqlPool();
+
 console.log("Sql connected")
 
 mongoose.connect(process.env.ACCOUNT_DB as string).then(() => {
