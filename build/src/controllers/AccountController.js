@@ -9,11 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { accountServiceMongo } from "../service/impl/AccountServiceImplMongo.js";
 import { HttpError } from "../errorHandler/HttpError.js";
-import { convertReaderDtoToReader } from "../utils/tools.js";
+import { convertReaderDtoToReader, getRole } from "../utils/tools.js";
 class AccountController {
     constructor() {
         this.service = accountServiceMongo;
-        this.createReader = (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.createAccount = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const body = req.body;
             const reader = convertReaderDtoToReader(body);
             yield this.service.createAccount(reader);
@@ -23,36 +23,36 @@ class AccountController {
             const id = +req.query.id;
             if (!id)
                 throw new HttpError(400, "No params");
-            const reader = yield this.service.getAccount(id);
-            res.json(reader);
+            const account = yield this.service.getAccount(id);
+            res.json(account);
         });
         this.removeAccount = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const id = +req.query.id;
-            if (!id)
-                throw new HttpError(400, "No params");
-            const removed = yield this.service.removeAccount(id);
-            res.json(removed);
+            const account = yield this.service.removeAccount(id);
+            res.json(account);
         });
         this.changePassword = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const id = +req.body.id;
-            const newPassword = req.body.newPassword;
-            if (!id)
-                throw new HttpError(400, "No id param");
-            if (!newPassword)
-                throw new HttpError(400, "No password param");
+            const { id, oldPassword, newPassword } = req.body;
+            yield this.service.checkPassword(id, oldPassword);
             yield this.service.changePassword(id, newPassword);
-            res.status(200).send();
+            res.send("Password changed");
         });
         this.editAccount = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const id = +req.body.id;
-            const newData = req.body;
-            if (!id)
-                throw new HttpError(400, "No id param");
-            if (!newData.username || !newData.email || !newData.birthDate) {
-                throw new HttpError(400, "No params");
-            }
-            const updated = yield this.service.editAccount(id, newData);
+            const id = +req.query.id;
+            const newReaderData = req.body;
+            const updated = yield this.service.editAccount(id, newReaderData);
             res.json(updated);
+        });
+        this.addRole = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const newRole = getRole(req.query.role);
+            const readerId = +req.query.id; //Todo
+            const readerWithNewRole = yield this.service.addRole(readerId, newRole);
+            res.json(readerWithNewRole);
+        });
+        this.login = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { id, password } = req.body;
+            const token = yield this.service.login(id, password);
+            res.send(token);
         });
     }
 }

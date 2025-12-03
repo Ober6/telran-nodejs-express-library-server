@@ -19,59 +19,88 @@ export class BookServiceImplSQL {
     }
     getAllBooks() {
         return __awaiter(this, void 0, void 0, function* () {
-            const [res] = yield pool.query('SELECT * FROM books');
-            if (!res)
-                throw new HttpError(400, "Can't get all the books");
-            return res;
+            const [result] = yield pool.query('SELECT * FROM books');
+            console.log(result);
+            return result;
         });
     }
     getBookByAuthor(author) {
         return __awaiter(this, void 0, void 0, function* () {
-            const [res] = yield pool.query('SELECT * FROM books WHERE author = ?', [author]);
-            if (!res)
-                throw new HttpError(400, "Can't get all the books");
-            return res;
+            const [result] = yield pool.query('SELECT * FROM books WHERE author = ?', [author]);
+            return result;
         });
     }
     pickBook(id, reader, readerId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const [books] = yield pool.query('SELECT status FROM books WHERE id = ?', [id]);
-            if (!books.length)
-                throw new HttpError(404, "Book not found");
-            if (books[0].status !== 'in_stock')
-                throw new HttpError(400, "Book already taken");
-            const [readerRes] = yield pool.query('SELECT id FROM readers WHERE id = ?', [readerId]);
-            let readerResId;
-            if (readerRes.length)
-                readerResId = readerRes[0].id;
-            else {
-                const [result] = yield pool.query('INSERT INTO readers (name) VALUES (?)', [reader]);
-                readerResId = result.insertId;
+            let query = "SELECT status FROM books WHERE id = ?";
+            const [books] = yield pool.query(query, [id]);
+            if (books.length === 0)
+                throw new HttpError(404, `Book with id ${id} not found`);
+            console.log(books);
+            if (books[0].status !== "in_stock")
+                throw new HttpError(409, "Book just on hand!");
+            //=========check reader==================
+            query = "SELECT reader_id FROM readers WHERE reader_id = ?";
+            const [readers] = yield pool.query(query, [readerId]);
+            if (readers.length === 0) {
+                query = "INSERT INTO readers  VALUES (?,?)";
+                const [newReader] = yield pool.query(query, [readerId, reader]);
             }
-            yield pool.query('INSERT INTO books_readers (book_id, reader_id) VALUES (?, ?)', [id, readerResId]);
-            yield pool.query('UPDATE books SET status = ? WHERE id = ?', ['on_hand', id]);
+            //==================Create pick record================
+            const now = new Date().toDateString();
+            query = `INSERT INTO books_readers (book_id, reader_id, pick_date) VALUES (?, ?, ?)`;
+            yield pool.query(query, [id, readerId, now]);
+            //===================Change book status===================
+            query = `UPDATE books SET status = 'on_hand' WHERE id = ?`;
+            yield pool.query(query, [id]);
         });
     }
     removeBook(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const [books] = yield pool.query('SELECT * FROM books WHERE id = ?', [id]);
-            if (!books.length)
-                throw new HttpError(404, "Book not found");
-            const book = books[0];
+            //===============check book existing==================
+            let query = "SELECT * FROM books WHERE id = ?";
+            const [books] = yield pool.query(query, [id]);
+            if (books.length === 0)
+                throw new HttpError(404, `Book with id ${id} not found`);
+            if (books[0].status !== "in_stock")
+                throw new HttpError(409, "Book just on hand!");
+            //===================Change book status===================
+            query = `UPDATE books SET status = 'removed' WHERE id = ?`;
+            yield pool.query(query, [id]);
+            //get records from relation table================
+            const [records] = yield pool.query('SELECT * FROM books_readers WHERE book_id = ?', [id]);
+            //===========update relation table===============
             yield pool.query('DELETE FROM books_readers WHERE book_id = ?', [id]);
+            //==============delete book======================
             yield pool.query('DELETE FROM books WHERE id = ?', [id]);
-            return book;
+            const removed = {
+                _id: books[0].id,
+                title: books[0].title,
+                author: books[0].author,
+                status: books[0].status,
+                year: books[0].year,
+                genre: books[0].genre,
+                pickList: records
+            };
+            return removed;
         });
     }
     returnBook(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const [books] = yield pool.query('SELECT * FROM books WHERE id = ?', [id]);
-            if (!books.length)
-                throw new HttpError(404, "Book not found");
-            if (books[0].status !== 'on_hand')
-                throw new HttpError(400, "Can't return the book");
-            yield pool.query('DELETE FROM books_readers WHERE book_id = ?', [id]);
-            yield pool.query('UPDATE books SET status = ? WHERE id = ?', ['in_stock', id]);
+            let query = "SELECT status FROM books WHERE id = ?";
+            const [books] = yield pool.query(query, [id]);
+            if (books.length === 0)
+                throw new HttpError(404, `Book with id ${id} not found`);
+            console.log(books);
+            if (books[0].status !== "on_hand")
+                throw new HttpError(409, "Wrong book status!");
+            //===================Change book status===================
+            query = `UPDATE books SET status = 'in_stock' WHERE id = ?`;
+            yield pool.query(query, [id]);
+            //==========update record========================
+            const now = new Date().toDateString();
+            query = 'UPDATE books_readers SET return_date = ? WHERE book_id = ? AND return_date IS NULL';
+            yield pool.query(query, [now, id]);
         });
     }
 }
