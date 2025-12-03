@@ -13,6 +13,12 @@ export function getGenre(genre: string) {
     return gen;
 }
 
+export function getRole(data: string) {
+    const role  = Object.values(Roles).find(v => v === data)
+    if(!role) throw new HttpError(400, "Wrong role");
+    return role;
+}
+
 export const convertBookDtoToBook = (dto:BookDto):Book => {
     return {
         author: dto.author,
