@@ -3,9 +3,9 @@ import {HttpError} from "../errorHandler/HttpError.js";
 import { v4 as uuidv4 } from 'uuid';
 import {Reader, ReaderDto} from "../model/reader.js";
 import bcrypt from "bcryptjs";
-
 import {Roles} from "./libTypes.js";
 import jwt from  "jsonwebtoken";
+import {options} from "joi";
 
 export function getGenre(genre: string) {
     const gen = Object.values(BookGenres).find(v => v === genre)

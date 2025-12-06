@@ -6,7 +6,7 @@ import {readerMongooseModel} from "../../dbSchemas/readerMongooseSchema.js";
 import {Roles} from "../../utils/libTypes.js";
 import {getJWT} from "../../utils/tools.js"
 
-class AccountServiceImplMongo implements AccountService{
+export class AccountServiceImplMongo implements AccountService{
     async changePassword(id: number, newPassword: string): Promise<void> {
         console.log(id, newPassword)
         const account = await readerMongooseModel.findById(id);

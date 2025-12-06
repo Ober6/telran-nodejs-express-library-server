@@ -3,8 +3,10 @@ import {NextFunction, Request, Response} from "express";
 import bcrypt from "bcryptjs";
 import {HttpError} from "../errorHandler/HttpError.js";
 import {AuthRequest, Roles} from "../utils/libTypes.js";
+import jwt, {JwtPayload} from "jsonwebtoken";
 
 const BASIC = "Basic ";
+const BEARER = "Bearer ";
 
 async function getBasicAuth(authHeader: string, service: AccountService, req: AuthRequest, res: Response) {
     console.log(authHeader);
@@ -32,11 +34,25 @@ async function getBasicAuth(authHeader: string, service: AccountService, req: Au
     }
 }
 
+function getJWTAuth(authHeader: string, req: AuthRequest) {
+    const token = authHeader.substring(BEARER.length);
+    try {
+        const payload = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+        req.roles = JSON.parse(payload.roles) as Roles[];
+        req.userId = +payload.sub!;
+        req.userName = "Anonymous";
+    } catch (e) {
+        throw new HttpError(401,"");
+    }
+}
+
 export const authenticate = (service:AccountService) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         const authHeader = req.header('Authorization');
-        if (authHeader)
+        if(authHeader && authHeader.startsWith(BASIC))
             await getBasicAuth(authHeader, service, req, res);
+        else if(authHeader && authHeader.startsWith(BEARER))
+            getJWTAuth(authHeader, req);
         next();
     }
 }
