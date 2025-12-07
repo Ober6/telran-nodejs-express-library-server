@@ -8,7 +8,9 @@ import confJson from "../../config/lib-config.json" with {type:'json'};
 export type AppConfig = {
     port: number,
     skipRoutesArr: string[],
-    pathRoles: Record<string, string[]>,
+    rate_limit: number,
+    max_requests_per_minute: number,
+    pathRoles: Record<string, string[]>
     // createSqlPool: () => {}
 }
 

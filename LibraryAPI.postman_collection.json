@@ -17,7 +17,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6IltcInJlYWRlclwiLFwibGlicmFyaWFuXCJdIiwiaWF0IjoxNzY1MTEwNzEwLCJleHAiOjE3NjUxMTQzMTAsInN1YiI6IjEwMDAwMDAwMSJ9.vbDKpMOtlsbbgiwRloA2jia-zxVr6mU5mRvL4c4AyUY",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6IltcInJlYWRlclwiXSIsImlhdCI6MTc2NTEyODA4NCwiZXhwIjoxNzY1MTMxNjg0LCJzdWIiOiIxMDAwMDAwMDMifQ.C2mVp0yDFj69K3lI0jm4ho6KWHxg0sifPB3zLez3zjs",
 									"type": "string"
 								}
 							]
@@ -25,7 +25,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3050/account/byId?id=100000001",
+							"raw": "http://localhost:3050/account/byId?id=100000003",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -38,7 +38,7 @@
 							"query": [
 								{
 									"key": "id",
-									"value": "100000001"
+									"value": "100000003"
 								}
 							]
 						}
@@ -168,16 +168,11 @@
 					"name": "addRole",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
+							"type": "bearer",
+							"bearer": [
 								{
-									"key": "password",
-									"value": "123456789.com",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "100000000",
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6IltcInJlYWRlclwiLFwibGlicmFyaWFuXCIsXCJwcmVtaXVtX3VzZXJcIixcInByZW1pdW1fdXNlclwiXSIsImlhdCI6MTc2NTEyNzcwNywiZXhwIjoxNzY1MTMxMzA3LCJzdWIiOiIxMDAwMDAwMDEifQ.PEzEjAGdp9F08sGYvSrx7ysZXDmoEtFIEF1KaFbT03k",
 									"type": "string"
 								}
 							]
@@ -225,7 +220,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\":100000001,\r\n    \"password\": \"name2NewPassword\"\r\n}",
+							"raw": "{\r\n    \"id\":100000003,\r\n    \"password\": \"name3password\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -254,7 +249,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\":100000001,\r\n    \"username\":\"name2\",\r\n    \"email\":\"name2@mail.com\",\r\n   \"password\": \"name2password\",\r\n    \"birthDate\":\"1999-09-09\"\r\n}",
+							"raw": "{\r\n    \"id\":100000003,\r\n    \"username\":\"name3\",\r\n    \"email\":\"name3@mail.com\",\r\n   \"password\": \"name3password\",\r\n    \"birthDate\":\"1999-09-09\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

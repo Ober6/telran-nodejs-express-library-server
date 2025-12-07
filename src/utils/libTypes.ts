@@ -10,5 +10,7 @@ export enum Roles {
     READER = "reader",
     ADMIN = "admin",
     LIBRARIAN = "librarian",
-    SUPERVISOR = "super"
+    SUPERVISOR = "super",
+    PREMIUM_USER = "premium_user"
 }
+

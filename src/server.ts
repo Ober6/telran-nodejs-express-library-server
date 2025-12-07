@@ -9,6 +9,7 @@ import {authenticate, skipRoutes} from "./middleware/authentication.js";
 import {accountServiceMongo} from "./service/impl/AccountServiceImplMongo.js";
 import {authorize} from "./middleware/authorization.js";
 import {Roles} from "./utils/libTypes.js";
+import {rateLimiter} from "./middleware/rateLimiter.js";
 //import dotenv from "dotenv";
 export const launchServer = () => {
     const app = express();
@@ -25,6 +26,7 @@ export const launchServer = () => {
     //==================Middleware=================
     app.use(authenticate(accountServiceMongo))
     app.use(skipRoutes(config.skipRoutesArr));
+    app.use(rateLimiter());
     app.use(authorize(config.pathRoles as Record<string, Roles[]>))
     app.use(express.json())
     app.use(morgan('combined'))

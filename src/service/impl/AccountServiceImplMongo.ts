@@ -35,7 +35,6 @@ export class AccountServiceImplMongo implements AccountService{
         if (!result) throw new HttpError(404, "Account not found");
         const {_id, username, email, passHash, birthDate, roles } = result;
         return {_id, username, email, passHash, birthDate, roles }
-
     }
 
     async getAccount(id: number): Promise<Reader> {
@@ -63,8 +62,14 @@ export class AccountServiceImplMongo implements AccountService{
     async addRole(id: number, role: Roles): Promise<Reader> {
         const account = await readerMongooseModel.findById(id);
         if(!account) throw new HttpError(404,"");
+
+        if (account!.roles.includes(role)) {
+            throw new HttpError(409, `Role '${role}' already exists`);
+        }
+
         account.roles.push(role);
         account.save();
+
         return account as Reader;
     }
 

@@ -51,6 +51,7 @@ class AccountController {
         const readerWithNewRole = await this.service.addRole(readerId, newRole);
         res.json(readerWithNewRole);
     };
+
     login =  async (req: Request, res: Response) => {
         const {id, password} = req.body;
         const token = await this.service.login(id, password);

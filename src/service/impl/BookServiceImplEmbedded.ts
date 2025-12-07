@@ -55,7 +55,6 @@ class BookServiceImplEmbedded implements BookService{
         book.pickList[book.pickList.length -1].returnDate = new Date().toDateString();
         return Promise.resolve();
     }
-
 }
 
 export  const bookServiceEmbedded = new BookServiceImplEmbedded();

@@ -24,6 +24,7 @@ async function getBasicAuth(authHeader: string, service: AccountService, req: Au
                 req.userName = account.username;
                 req.roles = account.roles || [Roles.READER]; //Todo
 
+                console.log("Account roles:", account.roles);
                 console.log("Authenticated")
             } else {
                 console.log("Not Authenticated")
