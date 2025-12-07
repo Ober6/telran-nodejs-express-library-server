@@ -1,0 +1,17 @@
+{
+  "port": 3050,
+  "skipRoutesArr": ["POST/account", "POST/account/login"],
+  "pathRoles": {
+    "GET/account/byId": ["reader"],
+    "PATCH/account/password":["reader"],
+    "PATCH/account/update":["admin"],
+    "DELETE/account":["super"],
+    "PATCH/account/roles":["super"],
+    "GET/api/books":["reader"],
+    "POST/api/books":["librarian"],
+    "DELETE/api/books":["librarian"],
+    "GET/api/books/author":["reader"],
+    "PATCH/api/books/pick":["librarian"],
+    "PATCH/api/books/return":["librarian"]
+  }
+}
