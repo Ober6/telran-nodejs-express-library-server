@@ -11,7 +11,7 @@ import bcrypt from "bcryptjs";
 import { HttpError } from "../../errorHandler/HttpError.js";
 import { readerMongooseModel } from "../../dbSchemas/readerMongooseSchema.js";
 import { getJWT } from "../../utils/tools.js";
-class AccountServiceImplMongo {
+export class AccountServiceImplMongo {
     changePassword(id, newPassword) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log(id, newPassword);

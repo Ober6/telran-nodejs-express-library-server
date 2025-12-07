@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { accountServiceMongo } from "../service/impl/AccountServiceImplMongo.js";
 import { HttpError } from "../errorHandler/HttpError.js";
 import { convertReaderDtoToReader, getRole } from "../utils/tools.js";
+import { Roles } from "../utils/libTypes.js";
 class AccountController {
     constructor() {
         this.service = accountServiceMongo;
@@ -20,9 +21,12 @@ class AccountController {
             res.status(201).send();
         });
         this.getAccountById = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            var _a, _b;
             const id = +req.query.id;
             if (!id)
                 throw new HttpError(400, "No params");
+            if ((!((_a = req.roles) === null || _a === void 0 ? void 0 : _a.includes(Roles.ADMIN)) || !((_b = req.roles) === null || _b === void 0 ? void 0 : _b.includes(Roles.LIBRARIAN))) && id != req.userId)
+                throw new HttpError(403, "Only account owner or Admin can see account");
             const account = yield this.service.getAccount(id);
             res.json(account);
         });
@@ -33,6 +37,8 @@ class AccountController {
         });
         this.changePassword = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { id, oldPassword, newPassword } = req.body;
+            if (id != req.userId)
+                throw new HttpError(403, "Only account owner can change password");
             yield this.service.checkPassword(id, oldPassword);
             yield this.service.changePassword(id, newPassword);
             res.send("Password changed");

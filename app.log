@@ -37,3 +37,9 @@
 ::1 - - [03/Dec/2025:18:54:33 +0000] "POST /account/login HTTP/1.1" 200 183
 ::1 - 123456789 [03/Dec/2025:19:07:47 +0000] "GET /account/byId?id=123456789 HTTP/1.1" 200 183
 ::1 - 123456789 [03/Dec/2025:19:08:37 +0000] "PATCH /account/password HTTP/1.1" 200 16
+::1 - - [07/Dec/2025:11:47:04 +0000] "POST /account HTTP/1.1" 400 47
+::1 - - [07/Dec/2025:11:47:25 +0000] "POST /account HTTP/1.1" 201 -
+::1 - - [07/Dec/2025:11:50:55 +0000] "POST /account/login HTTP/1.1" 200 183
+::1 - - [07/Dec/2025:11:54:17 +0000] "PATCH /account/password HTTP/1.1" 403 38
+::1 - - [07/Dec/2025:11:55:24 +0000] "PATCH /account/password HTTP/1.1" 200 16
+::1 - - [07/Dec/2025:11:56:44 +0000] "GET /account/byId?id=100000001 HTTP/1.1" 200 179

@@ -1,7 +1,6 @@
 import mysql from "mysql2/promise";
-import { Roles } from "../utils/libTypes.js";
-// export  const PORT = 3050;
-export const DB = "mongodb+srv://telran6prac_db_user:fym69LVhpwOQhtbP@cluster0.yqszp3e.mongodb.net/library?appName=Cluster0";
+import confJson from "../../config/lib-config.json" with { type: 'json' };
+export const config = Object.assign({}, confJson);
 export const createSqlPool = () => {
     return mysql.createPool({
         host: process.env.SQL_HOST,
@@ -12,10 +11,18 @@ export const createSqlPool = () => {
     });
 };
 export const skipRoutesArr = ["POST/account", "POST/account/login"];
-export const pathRoles = {
-    "GET/account/byId": [Roles.READER],
-    "PATCH/account/password": [Roles.READER],
-    "PATCH/account/update": [Roles.ADMIN],
-    "DELETE/account": [Roles.SUPERVISOR],
-    "PATCH/account/roles": [Roles.SUPERVISOR]
-};
+// export const pathRoles = {
+//     //=============Accounting=================
+//     "GET/account/byId": [Roles.READER],
+//     "PATCH/account/password":[Roles.READER],
+//     "PATCH/account/update":[Roles.ADMIN],
+//     "DELETE/account":[Roles.SUPERVISOR],
+//     "PATCH/account/roles":[Roles.SUPERVISOR],
+//     //================Books===================
+//     "GET/api/books":[Roles.READER],
+//     "POST/api/books":[Roles.LIBRARIAN],
+//     "DELETE/api/books":[Roles.LIBRARIAN],
+//     "GET/api/books/author":[Roles.READER],
+//     "PATCH/api/books/pick":[Roles.LIBRARIAN],
+//     "PATCH/api/books/return":[Roles.LIBRARIAN],
+// }

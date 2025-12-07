@@ -8,13 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { convertBookDtoToBook } from "../utils/tools.js";
-// import {bookServiceMongo} from "../service/impl/BookServiceImplMongo.js";
-import { bookServiceSql } from "../service/impl/BookServiceImplSQL.js";
+import { bookServiceMongo } from "../service/impl/BookServiceImplMongo.js";
+import { HttpError } from "../errorHandler/HttpError.js";
+import { accountServiceMongo } from "../service/impl/AccountServiceImplMongo.js";
 export class BookController {
     constructor() {
-        // service: BookService = bookServiceEmbedded;
-        //private service: BookService = bookServiceMongo;
-        this.service = bookServiceSql;
+        //private service: BookService = bookServiceEmbedded;
+        this.service = bookServiceMongo;
+        //private service: BookService = bookServiceSql;
         this.removeBook = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const bookId = req.query.bookId;
             const result = yield this.service.removeBook(bookId);
@@ -32,9 +33,12 @@ export class BookController {
         });
         this.pickBook = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const bookId = req.query.bookId;
-            const { readerName, readerId } = req.body;
-            yield this.service.pickBook(bookId, readerName, +readerId);
-            res.send(`Book picked to ${readerName}`);
+            const readerId = req.query.readerId;
+            if (!readerId)
+                throw new HttpError(401, "");
+            const { username } = yield accountServiceMongo.getAccount(+readerId);
+            yield this.service.pickBook(bookId, username, +readerId);
+            res.send(`Book picked to ${username}`);
         });
         this.returnBook = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const bookId = req.query.bookId;

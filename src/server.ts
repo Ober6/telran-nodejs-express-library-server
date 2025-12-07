@@ -18,7 +18,7 @@ export const launchServer = () => {
     // })
     //dotenv.config();
 
-    app.listen(config.PORT, () => {
+    app.listen(config.port, () => {
         console.log(`Server runs at http://localhost:${config.port}`);
     })
     const logStream = fs.createWriteStream('app.log',{flags:'a'})
