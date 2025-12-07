@@ -43,3 +43,16 @@
 ::1 - - [07/Dec/2025:11:54:17 +0000] "PATCH /account/password HTTP/1.1" 403 38
 ::1 - - [07/Dec/2025:11:55:24 +0000] "PATCH /account/password HTTP/1.1" 200 16
 ::1 - - [07/Dec/2025:11:56:44 +0000] "GET /account/byId?id=100000001 HTTP/1.1" 200 179
+::1 - 100000000 [07/Dec/2025:12:28:53 +0000] "PATCH /account/roles?id=100000001&role=LIBRARIAN HTTP/1.1" 400 10
+::1 - 100000000 [07/Dec/2025:12:29:17 +0000] "PATCH /account/roles?id=100000001&role=Librarian HTTP/1.1" 400 10
+::1 - 100000000 [07/Dec/2025:12:29:29 +0000] "PATCH /account/roles?id=100000001&role=librarian HTTP/1.1" 200 199
+::1 - - [07/Dec/2025:12:31:15 +0000] "POST /account/login HTTP/1.1" 401 17
+::1 - - [07/Dec/2025:12:31:50 +0000] "POST /account/login HTTP/1.1" 200 201
+::1 - - [07/Dec/2025:12:32:21 +0000] "GET /account/byId?id=100000001 HTTP/1.1" 200 191
+::1 - - [07/Dec/2025:12:32:43 +0000] "POST /api/books HTTP/1.1" 400 19
+::1 - - [07/Dec/2025:12:33:23 +0000] "POST /api/books HTTP/1.1" 400 11
+::1 - - [07/Dec/2025:12:33:33 +0000] "POST /api/books HTTP/1.1" 201 -
+::1 - - [07/Dec/2025:12:34:15 +0000] "PATCH /api/books/pick?bookId=200000001&readerId=100000001 HTTP/1.1" 409 33
+::1 - - [07/Dec/2025:12:34:33 +0000] "PATCH /api/books/pick?bookId=3d8a5dd8-9657-48d0-974c-09036ff83551&readerId=100000001 HTTP/1.1" 200 20
+::1 - - [07/Dec/2025:12:35:04 +0000] "PATCH /api/books/return?bookId=3d8a5dd8-9657-48d0-974c-09036ff83551 HTTP/1.1" 200 13
+::1 - - [07/Dec/2025:12:35:24 +0000] "GET /api/books/author?author=author1 HTTP/1.1" 200 258

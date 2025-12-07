@@ -1,0 +1,504 @@
+{
+	"info": {
+		"_postman_id": "8bc1d165-3eca-4b70-8dad-cf4e4d65b547",
+		"name": "LibraryAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42357202"
+	},
+	"item": [
+		{
+			"name": "account",
+			"item": [
+				{
+					"name": "getAccountById",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6IltcInJlYWRlclwiLFwibGlicmFyaWFuXCJdIiwiaWF0IjoxNzY1MTEwNzEwLCJleHAiOjE3NjUxMTQzMTAsInN1YiI6IjEwMDAwMDAwMSJ9.vbDKpMOtlsbbgiwRloA2jia-zxVr6mU5mRvL4c4AyUY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3050/account/byId?id=100000001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"account",
+								"byId"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "100000001"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "removeAccount",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6IltcInJlYWRlclwiXSIsImlhdCI6MTc2NTEwODI1NSwiZXhwIjoxNzY1MTExODU1LCJzdWIiOiIxMDAwMDAwMDEifQ.fyfmCAYytoaGVzpsoxJlhcxHSV0tPTyFTk5dnOhMlyY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3050/account?id=100000001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"account"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "100000001"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "changePassword",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6IltcInJlYWRlclwiXSIsImlhdCI6MTc2NTEwODI1NSwiZXhwIjoxNzY1MTExODU1LCJzdWIiOiIxMDAwMDAwMDEifQ.fyfmCAYytoaGVzpsoxJlhcxHSV0tPTyFTk5dnOhMlyY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":100000001,\r\n    \"oldPassword\": \"name2password\",\r\n    \"newPassword\": \"name2NewPassword\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3050/account/password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"account",
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editAccount",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6IltcInJlYWRlclwiXSIsImlhdCI6MTc2NTEwODI1NSwiZXhwIjoxNzY1MTExODU1LCJzdWIiOiIxMDAwMDAwMDEifQ.fyfmCAYytoaGVzpsoxJlhcxHSV0tPTyFTk5dnOhMlyY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"name2NewName\",\r\n    \"email\": \"name2NewEmail@a.b\",\r\n    \"birthDate\": \"1990-05-15\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3050/account/update?id=100000001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"account",
+								"update"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "100000001"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addRole",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "123456789.com",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "100000000",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3050/account/roles?id=100000001&role=librarian",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"account",
+								"roles"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "100000001"
+								},
+								{
+									"key": "role",
+									"value": "librarian"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":100000001,\r\n    \"password\": \"name2NewPassword\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3050/account/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"account",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createAccount",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":100000001,\r\n    \"username\":\"name2\",\r\n    \"email\":\"name2@mail.com\",\r\n   \"password\": \"name2password\",\r\n    \"birthDate\":\"1999-09-09\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3050/account",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"account"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "book",
+			"item": [
+				{
+					"name": "getAllBooks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3050/api/books",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"api",
+								"books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addBook",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6IltcInJlYWRlclwiLFwibGlicmFyaWFuXCJdIiwiaWF0IjoxNzY1MTEwNzEwLCJleHAiOjE3NjUxMTQzMTAsInN1YiI6IjEwMDAwMDAwMSJ9.vbDKpMOtlsbbgiwRloA2jia-zxVr6mU5mRvL4c4AyUY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"book1\",\r\n    \"author\":\"author1\",\r\n    \"genre\": \"classic\",\r\n    \"year\": 2000,\r\n    \"quantity\":12\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3050/api/books",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"api",
+								"books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "removeBook",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3050/api/books?bookId=3d8a5dd8-9657-48d0-974c-09036ff83551",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"api",
+								"books"
+							],
+							"query": [
+								{
+									"key": "bookId",
+									"value": "3d8a5dd8-9657-48d0-974c-09036ff83551"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pickBook",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6IltcInJlYWRlclwiLFwibGlicmFyaWFuXCJdIiwiaWF0IjoxNzY1MTEwNzEwLCJleHAiOjE3NjUxMTQzMTAsInN1YiI6IjEwMDAwMDAwMSJ9.vbDKpMOtlsbbgiwRloA2jia-zxVr6mU5mRvL4c4AyUY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3050/api/books/pick?bookId=3d8a5dd8-9657-48d0-974c-09036ff83551&readerId=100000001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"api",
+								"books",
+								"pick"
+							],
+							"query": [
+								{
+									"key": "bookId",
+									"value": "3d8a5dd8-9657-48d0-974c-09036ff83551"
+								},
+								{
+									"key": "readerId",
+									"value": "100000001"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "returnBook",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6IltcInJlYWRlclwiLFwibGlicmFyaWFuXCJdIiwiaWF0IjoxNzY1MTEwNzEwLCJleHAiOjE3NjUxMTQzMTAsInN1YiI6IjEwMDAwMDAwMSJ9.vbDKpMOtlsbbgiwRloA2jia-zxVr6mU5mRvL4c4AyUY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3050/api/books/return?bookId=3d8a5dd8-9657-48d0-974c-09036ff83551",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"api",
+								"books",
+								"return"
+							],
+							"query": [
+								{
+									"key": "bookId",
+									"value": "3d8a5dd8-9657-48d0-974c-09036ff83551"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getBookByAuthor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6IltcInJlYWRlclwiLFwibGlicmFyaWFuXCJdIiwiaWF0IjoxNzY1MTEwNzEwLCJleHAiOjE3NjUxMTQzMTAsInN1YiI6IjEwMDAwMDAwMSJ9.vbDKpMOtlsbbgiwRloA2jia-zxVr6mU5mRvL4c4AyUY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3050/api/books/author?author=author1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3050",
+							"path": [
+								"api",
+								"books",
+								"author"
+							],
+							"query": [
+								{
+									"key": "author",
+									"value": "author1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
