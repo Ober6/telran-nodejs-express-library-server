@@ -78,6 +78,9 @@ export class AccountServiceImplMongo {
             const account = yield readerMongooseModel.findById(id);
             if (!account)
                 throw new HttpError(404, "");
+            if (account.roles.includes(role)) {
+                throw new HttpError(409, `Role '${role}' already exists`);
+            }
             account.roles.push(role);
             account.save();
             return account;

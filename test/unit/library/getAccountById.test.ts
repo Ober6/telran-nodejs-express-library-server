@@ -1,4 +1,4 @@
-import {AccountServiceImplMongo} from "../../../src/service/impl/AccountServiceImplMongo.js";
+import {AccountServiceImplMongo} from "../../../src/service/impl/AccountServiceImplMongo.ts";
 
 describe("AccountServiceImplMongo", () => {
     const service = new AccountServiceImplMongo();

@@ -1,10 +1,10 @@
-import {AccountService} from "../AccountService.js";
-import {Reader, UpdateReaderDto} from "../../model/reader.js";
+import {AccountService} from "../AccountService.ts";
+import {Reader, UpdateReaderDto} from "../../model/reader.ts";
 import bcrypt from "bcryptjs";
-import {HttpError} from "../../errorHandler/HttpError.js";
-import {readerMongooseModel} from "../../dbSchemas/readerMongooseSchema.js";
-import {Roles} from "../../utils/libTypes.js";
-import {getJWT} from "../../utils/tools.js"
+import {HttpError} from "../../errorHandler/HttpError.ts";
+import {readerMongooseModel} from "../../dbSchemas/readerMongooseSchema.ts";
+import {Roles} from "../../utils/libTypes.ts";
+import {getJWT} from "../../utils/tools.ts"
 
 export class AccountServiceImplMongo implements AccountService{
     async changePassword(id: number, newPassword: string): Promise<void> {

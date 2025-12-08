@@ -1,5 +1,5 @@
 import * as mongoose from "mongoose";
-import {Roles} from "../utils/libTypes.js";
+import {Roles} from "../utils/libTypes.ts";
 
 const readerMongooseSchema = new mongoose.Schema({
     _id:{type:Number, length: 9, required: true},

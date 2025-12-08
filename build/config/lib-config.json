@@ -1,6 +1,8 @@
 {
     "port": 3050,
     "skipRoutesArr": ["POST/account", "POST/account/login"],
+    "rate_limit": 60000,
+    "max_requests_per_minute": 10,
     "pathRoles": {
         "GET/account/byId": ["reader"],
         "PATCH/account/password": ["reader"],

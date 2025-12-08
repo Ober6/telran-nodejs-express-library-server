@@ -30,6 +30,7 @@ function getBasicAuth(authHeader, service, req, res) {
                     req.userId = account._id;
                     req.userName = account.username;
                     req.roles = account.roles || [Roles.READER]; //Todo
+                    console.log("Account roles:", account.roles);
                     console.log("Authenticated");
                 }
                 else {

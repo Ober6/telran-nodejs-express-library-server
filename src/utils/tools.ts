@@ -1,9 +1,9 @@
-import {Book, BookDto, BookGenres, BookStatus} from "../model/book.js";
-import {HttpError} from "../errorHandler/HttpError.js";
+import {Book, BookDto, BookGenres, BookStatus} from "../model/book.ts";
+import {HttpError} from "../errorHandler/HttpError.ts";
 import { v4 as uuidv4 } from 'uuid';
-import {Reader, ReaderDto} from "../model/reader.js";
+import {Reader, ReaderDto} from "../model/reader.ts";
 import bcrypt from "bcryptjs";
-import {Roles} from "./libTypes.js";
+import {Roles} from "./libTypes.ts";
 import jwt from  "jsonwebtoken";
 import {options} from "joi";
 
