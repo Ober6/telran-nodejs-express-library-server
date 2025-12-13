@@ -26,11 +26,14 @@ describe("AccountServiceImplMongo.addRole", () => {
             .rejects.toThrow("Role 'admin' already exists");
     });
 
+
     test("Passed test", async () => {
-        const mockAccount = {
+        const mockAccount: any = {
             roles: [],
-            save: jest.fn().mockResolvedValue(undefined)
+            save: jest.fn()
         };
+
+        mockAccount.save.mockResolvedValue(mockAccount);
 
         (readerMongooseModel.findById as jest.Mock).mockResolvedValue(mockAccount);
 
