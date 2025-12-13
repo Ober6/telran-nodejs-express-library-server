@@ -68,9 +68,7 @@ const config = {
     //   "node"
     // ],
     // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-    moduleNameMapper: {
-        '^(\\.{1,2}/.*)\\.js$': '$1', //remove .js from paths
-    },
+    // moduleNameMapper: {},
     // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
     // modulePathIgnorePatterns: [],
     // Activates notifications for test results
@@ -78,7 +76,7 @@ const config = {
     // An enum that specifies notification mode. Requires { notify: true }
     // notifyMode: "failure-change",
     // A preset that is used as a base for Jest's configuration
-    preset: "ts-jest",
+    // preset: undefined,
     // Run tests from one or more projects
     // projects: undefined,
     // Use this configuration option to add custom reporters to Jest
@@ -108,16 +106,16 @@ const config = {
     // A list of paths to snapshot serializer modules Jest should use for snapshot testing
     // snapshotSerializers: [],
     // The test environment that will be used for testing
-    testEnvironment: "jest-environment-node",
+    // testEnvironment: "jest-environment-node",
     // Options that will be passed to the testEnvironment
     // testEnvironmentOptions: {},
     // Adds a location field to test results
     // testLocationInResults: false,
     // The glob patterns Jest uses to detect test files
-    testMatch: [
-        "**/__tests__/**/*.?([mc])[jt]s?(x)",
-        "**/?(*.)+(spec|test).?([mc])[jt]s?(x)"
-    ],
+    // testMatch: [
+    //   "**/__tests__/**/*.?([mc])[jt]s?(x)",
+    //   "**/?(*.)+(spec|test).?([mc])[jt]s?(x)"
+    // ],
     // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
     // testPathIgnorePatterns: [
     //   "\\\\node_modules\\\\"
@@ -129,12 +127,12 @@ const config = {
     // This option allows use of a custom test runner
     // testRunner: "jest-circus/runner",
     // A map from regular expressions to paths to transformers
-    transform: { "^.+\\.tsx?$": "ts-jest" },
+    // transform: undefined,
     // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
-    transformIgnorePatterns: [
-        "\\\\node_modules\\\\",
-        "\\.pnp\\.[^\\\\]+$"
-    ],
+    // transformIgnorePatterns: [
+    //   "\\\\node_modules\\\\",
+    //   "\\.pnp\\.[^\\\\]+$"
+    // ],
     // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
     // unmockedModulePathPatterns: undefined,
     // Indicates whether each individual test should be reported during the run
