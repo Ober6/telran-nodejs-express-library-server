@@ -68,9 +68,8 @@ export class AccountServiceImplMongo implements AccountService{
         }
 
         account.roles.push(role);
-        account.save();
-
-        return account as Reader;
+        const result = await account.save();
+        return result as Reader;
     }
 
     async login(id: number, password: string): Promise<string> {
