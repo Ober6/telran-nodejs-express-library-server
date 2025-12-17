@@ -5,35 +5,249 @@
     "version": "1.0.0",
     "description": "API for control all library process with security...."
   },
-  "servers": [{
-    "url": "http://localhost:3050",
-    "description": "Dev local server"
-  }],
+  "servers": [
+    {
+      "url": "http://localhost:3050",
+      "description": "Dev local server"
+    }
+  ],
   "paths": {
     "/account": {
       "post": {
-        "summary": "Add new reader's account",
-        "description": "Add new reader's account without authorization",
+        "summary": "Add new reader account",
+        "description": "Create a new reader account without authorization",
         "tags": ["Accounting"],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/reader_dto"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "201": {
-            "description": "If you get response with status 201 account was created"
+            "description": "Account successfully created"
+          },
+          "400": {
+            "description": "Validation error - invalid request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error_response"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Id conflict",
+            "description": "Reader already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error_response"
+                },
+                "example": {
+                  "status": 409,
+                  "message": "Reader already exists"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove reader account",
+        "description": "Remove reader account by id",
+        "tags": ["Accounting"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number"
+            },
+            "description": "Reader account id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Account successfully removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/reader"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Account not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error_response"
+                },
+                "example": {
+                  "status": 404,
+                  "message": "Account not found"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error_response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/books/pick": {
+      "patch": {
+        "summary": "Pick a book",
+        "description": "Assign a book to a reader (change book status to ON_HAND)",
+        "tags": ["Books"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Book identifier"
+          },
+          {
+            "name": "readerId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number"
+            },
+            "description": "Reader identifier"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Book successfully picked by reader",
             "content": {
               "text/plain": {
-                "example": "Reader already exists"
+                "example": "Book picked to John"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing readerId or invalid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error_response"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Reader not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error_response"
+                },
+                "example": {
+                  "status": 404,
+                  "message": "Account not found"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Book not found or book status is not IN_STOCK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error_response"
+                },
+                "examples": {
+                  "bookNotFound": {
+                    "value": {
+                      "status": 409,
+                      "message": "Book with id abc123 not exists"
+                    }
+                  },
+                  "bookNotInStock": {
+                    "value": {
+                      "status": 409,
+                      "message": "Book status is not \"in-stock\""
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/books/author": {
+      "get": {
+        "summary": "Get books by author",
+        "description": "Return list of books written by a specific author (empty array if no books found)",
+        "tags": ["Books"],
+        "parameters": [
+          {
+            "name": "author",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Author name"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of books by author (can be empty array)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/book"
+                  }
+                },
+                "examples": {
+                  "withBooks": {
+                    "value": [
+                      {
+                        "id": "uuid-here",
+                        "title": "Example Book",
+                        "author": "John Doe",
+                        "status": "IN_STOCK",
+                        "pickList": []
+                      }
+                    ]
+                  },
+                  "noBooks": {
+                    "value": []
+                  }
+                }
               }
             }
           }
@@ -42,15 +256,53 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "schemas": {
       "reader_dto": {
         "type": "object",
         "properties": {
           "id": {
             "type": "number",
+            "example": 123456789,
+            "description": "Unique reader identifier"
+          },
+          "username": {
+            "type": "string",
+            "example": "John",
+            "description": "Reader username"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "john@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "q1243TTTT&%gfhgf",
+            "description": "Reader password (will be hashed)"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2010-01-01"
+          }
+        },
+        "required": ["id", "username", "email", "password", "birthDate"]
+      },
+      "reader": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "number",
             "example": 123456789
           },
-          "name": {
+          "username": {
             "type": "string",
             "example": "John"
           },
@@ -58,13 +310,77 @@
             "type": "string",
             "example": "john@gmail.com"
           },
-          "password": {
+          "passHash": {
             "type": "string",
-            "example": "q1243TTTT&%gfhgf"
+            "example": "$2a$10$..."
           },
           "birthDate": {
             "type": "string",
             "example": "2010-01-01"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["READER", "LIBRARIAN", "ADMIN"]
+            },
+            "example": ["READER"]
+          }
+        }
+      },
+      "book": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "title": {
+            "type": "string",
+            "example": "The Great Book"
+          },
+          "author": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["IN_STOCK", "ON_HAND", "REMOVED"],
+            "example": "IN_STOCK"
+          },
+          "pickList": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "readerId": {
+                  "type": "number"
+                },
+                "readerName": {
+                  "type": "string"
+                },
+                "pickDate": {
+                  "type": "string"
+                },
+                "returnDate": {
+                  "type": "string",
+                  "nullable": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "error_response": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "number",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "Error description"
           }
         }
       }

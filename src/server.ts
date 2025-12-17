@@ -29,7 +29,7 @@ export const launchServer = () => {
     const logStream = fs.createWriteStream('app.log',{flags:'a'})
 
     //==================OpenApi Docs===============
-    app.use('docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc, {
+    app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc, {
         swaggerOptions:{
             supportedSubmitMethods:[]
         }
