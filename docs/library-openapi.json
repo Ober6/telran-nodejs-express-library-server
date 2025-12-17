@@ -1,0 +1,73 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Library API",
+    "version": "1.0.0",
+    "description": "API for control all library process with security...."
+  },
+  "servers": [{
+    "url": "http://localhost:3050",
+    "description": "Dev local server"
+  }],
+  "paths": {
+    "/account": {
+      "post": {
+        "summary": "Add new reader's account",
+        "description": "Add new reader's account without authorization",
+        "tags": ["Accounting"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/reader_dto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "If you get response with status 201 account was created"
+          },
+          "409": {
+            "description": "Id conflict",
+            "content": {
+              "text/plain": {
+                "example": "Reader already exists"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "reader_dto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 123456789
+          },
+          "name": {
+            "type": "string",
+            "example": "John"
+          },
+          "email": {
+            "type": "string",
+            "example": "john@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "q1243TTTT&%gfhgf"
+          },
+          "birthDate": {
+            "type": "string",
+            "example": "2010-01-01"
+          }
+        }
+      }
+    }
+  }
+}
