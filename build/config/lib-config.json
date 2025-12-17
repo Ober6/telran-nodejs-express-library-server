@@ -1,6 +1,6 @@
 {
     "port": 3050,
-    "skipRoutesArr": ["POST/account", "POST/account/login"],
+    "skipRoutesArr": ["POST/account", "POST/account/login", "GET/docs/"],
     "rate_limit": 60000,
     "max_requests_per_minute": 10,
     "pathRoles": {
